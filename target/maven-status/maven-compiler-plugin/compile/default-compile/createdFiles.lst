@@ -1,0 +1,11 @@
+user/Lecturer.class
+questions/Score.class
+assignement1/QandASystem.class
+records/Records.class
+records/ScoreRecords.class
+questions/Question.class
+questions/Exam.class
+user/CUIScanner.class
+user/User.class
+user/Student.class
+records/QuestionRecords.class

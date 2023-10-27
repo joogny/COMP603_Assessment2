@@ -1,0 +1,8 @@
+COMP603/exam_1/How many classes is there in this program?:11
+COMP603/exam_1/What is 2+2?:4
+COMP603/exam_2/How many packages?:4
+COMP603/exam_2/What is the main class?:QandASystem
+COMP603/exam_3/What is CUI?:Command-line User Interface
+COMP603/exam_3/How many labs are there?:9
+COMP500/final_exam/2+2?:4
+COMP500/final_exam/2+3?:5
