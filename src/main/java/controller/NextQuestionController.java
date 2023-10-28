@@ -38,7 +38,4 @@ public class NextQuestionController implements ActionListener {
         this.model.quitGame();
     }
 
-    public int getScore() {
-        return this.model.getScore();
-    }
 }

@@ -8,10 +8,14 @@
 /home/julien/NetBeansProjects/Comp603_Assessment2/src/main/java/controller/NextQuestionController.java
 /home/julien/NetBeansProjects/Comp603_Assessment2/src/main/java/controller/ChooseExamController.java
 /home/julien/NetBeansProjects/Comp603_Assessment2/src/main/java/records/Records.java
+/home/julien/NetBeansProjects/Comp603_Assessment2/src/main/java/controller/LogInTeacherController.java
 /home/julien/NetBeansProjects/Comp603_Assessment2/src/main/java/view/QuestionView.java
 /home/julien/NetBeansProjects/Comp603_Assessment2/src/main/java/user/CUIScanner.java
+/home/julien/NetBeansProjects/Comp603_Assessment2/src/main/java/controller/LogInStudentController.java
 /home/julien/NetBeansProjects/Comp603_Assessment2/src/main/java/user/Lecturer.java
+/home/julien/NetBeansProjects/Comp603_Assessment2/src/main/java/view/LogInView.java
 /home/julien/NetBeansProjects/Comp603_Assessment2/src/main/java/questions/Score.java
 /home/julien/NetBeansProjects/Comp603_Assessment2/src/main/java/model/Model.java
+/home/julien/NetBeansProjects/Comp603_Assessment2/src/main/java/model/UserType.java
 /home/julien/NetBeansProjects/Comp603_Assessment2/src/main/java/start/QandASystem.java
 /home/julien/NetBeansProjects/Comp603_Assessment2/src/main/java/questions/Exam.java

@@ -31,6 +31,8 @@ public class Model extends Observable implements Records {
     private int currentQuestionIndex;
     private int score;
     private boolean canQuitSafely = false;
+    private String userName;
+    private UserType userType;
 
     public Model() {
         this.questionRecords = new ArrayList<>();
@@ -194,10 +196,11 @@ public class Model extends Observable implements Records {
         return this.score;
     }
 
-    public void login(String username, String password) {
+    public void login(String username, UserType userType) {
+        this.userName = username;
+        this.userType = userType;
         setChanged();
-        notifyObservers(true);
-        nextQuestion();
+        notifyObservers(userType);
     }
 
 }
