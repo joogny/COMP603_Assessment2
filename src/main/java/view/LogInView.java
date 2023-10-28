@@ -28,7 +28,7 @@ public class LogInView extends JFrame implements Observer {
 
     private JPanel panel = new JPanel();
 
-    private JLabel userNameLabel = new JLabel("Username: ");
+    private JLabel userNameLabel = new JLabel("AUT ID: ");
     private JTextField userNameInput = new JTextField(10);
 
     private JLabel emptyInput = new JLabel("Please input a name");

@@ -9,11 +9,19 @@ import model.Model;
 import model.UserType;
 import questions.Exam;
 
+
+/*
+TODO:
+DB
+JUnit
+Display results
+Maybe files?
+ */
 public class ExamCodeView extends JFrame implements Observer {
 
     private JPanel examCodePanel = new JPanel();
 
-    private JLabel examCodeLabel = new JLabel("Exam code: ");
+    private JLabel examCodeLabel = new JLabel();
     private JTextField examCodeInput = new JTextField(10);
 
     private JLabel wrongExamCode = new JLabel("Exam doesn't exist");
@@ -67,9 +75,12 @@ public class ExamCodeView extends JFrame implements Observer {
         if (userType == UserType.STUDENT) {
             studentChooseExamButton.setVisible(true);
             teacherCreateExamButton.setVisible(false);
+            examCodeLabel.setText("Enter the name of the exam you want to start: ");
         } else {
             studentChooseExamButton.setVisible(false);
             teacherCreateExamButton.setVisible(true);
+            examCodeLabel.setText("Enter the name of the exam you want to see the results of: ");
+
         }
         this.setVisible(true);
 
