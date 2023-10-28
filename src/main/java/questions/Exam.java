@@ -4,21 +4,8 @@
  */
 package questions;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
-import java.util.UUID;
-import questions.Question;
-import user.CUIScanner;
 
 /**
  *
@@ -46,6 +33,18 @@ public class Exam {
 
     public HashSet<Question> getQuestions() {
         return questions;
+    }
+
+    public Question getQuestion(int questionIndex) {
+        int currentIndex = 0;
+        for (Iterator<Question> iterator = questions.iterator(); iterator.hasNext();) {
+            Question next = iterator.next();
+            if (currentIndex == questionIndex) {
+                return next;
+            }
+            currentIndex++;
+        }
+        return null;
     }
 
     public String getCourseCode() {

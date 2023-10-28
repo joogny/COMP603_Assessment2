@@ -10,7 +10,7 @@ package records;
  */
 public interface Records {
 
-    public void load();
+    public void loadQuestions();
 
     public void save();
 }

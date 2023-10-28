@@ -46,7 +46,7 @@ public class ScoreRecords implements Records {
     }
 
     @Override
-    public void load() {
+    public void loadQuestions() {
         scoreRecords = new ArrayList<>();
         try {
             FileReader fr = new FileReader(FILEPATH);

@@ -28,7 +28,7 @@ public class Question {
         this.answer = answer;
     }
 
-    public String getDisplayedQuestion() {
+    public String toString() {
         return question;
     }
 

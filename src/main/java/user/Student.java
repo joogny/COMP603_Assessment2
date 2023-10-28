@@ -4,13 +4,13 @@
  */
 package user;
 
-import records.ScoreRecords;
 import java.util.ArrayList;
-import questions.Exam;
-import records.QuestionRecords;
 import java.util.Iterator;
+import model.Model;
+import questions.Exam;
 import questions.Question;
 import questions.Score;
+import records.ScoreRecords;
 
 /**
  *
@@ -21,7 +21,7 @@ public class Student extends User {
     private String id;
 
     @Override
-    public void startCUI(QuestionRecords qr, ScoreRecords sr, CUIScanner sc) {
+    public void startCUI(Model qr, ScoreRecords sr, CUIScanner sc) {
         System.out.println("Welcome to the QnA application for students!");
         System.out.print("Please enter your student id: ");
         this.id = sc.nextLine();
@@ -29,7 +29,7 @@ public class Student extends User {
     }
 
     @Override
-    public void interactionWithCUI(QuestionRecords qr, ScoreRecords sr, CUIScanner sc) {
+    public void interactionWithCUI(Model qr, ScoreRecords sr, CUIScanner sc) {
         System.out.println();
         System.out.println("What do you want to do?");
         System.out.println("Type 1 to pass an exam");
@@ -58,7 +58,7 @@ public class Student extends User {
         interactionWithCUI(qr, sr, sc);
     }
 
-    private void findCourseGrade(CUIScanner sc, QuestionRecords qr, ScoreRecords sr) {
+    private void findCourseGrade(CUIScanner sc, Model qr, ScoreRecords sr) {
         System.out.print("Enter the code of the course: ");
         String courseCode = sc.nextLine();
         ArrayList<Exam> examList = qr.getExams(courseCode);
@@ -81,7 +81,7 @@ public class Student extends User {
         int index = 1;
         for (Iterator<Question> iterator = exam.getQuestions().iterator(); iterator.hasNext();) {
             Question q = iterator.next();
-            System.out.print(index + ". " + q.getDisplayedQuestion() + " ");
+            System.out.print(index + ". " + q.toString() + " ");
             String answer = sc.nextLine();
             if (q.answerIsCorrect(answer)) {
                 score++;
@@ -96,31 +96,31 @@ public class Student extends User {
     }
 
     //exam needs to exist and not be done by the student already
-    private Exam findExam(CUIScanner sc, QuestionRecords qr, ScoreRecords sr) {
+    private Exam findExam(CUIScanner sc, Model qr, ScoreRecords sr) {
 
-        Exam exam = null;
-        boolean foundExam = false;
-        boolean examIsNotDone = false;
-        while (!(foundExam && examIsNotDone)) {
-            System.out.print("Please enter the name of the exam: ");
-            String examName = sc.nextLine();
-            foundExam = false;
-            examIsNotDone = false;
-            exam = qr.findExam(examName);
-            if (exam != null) {
-                foundExam = true;
-                ArrayList<Exam> exams = new ArrayList<>();
-                exams.add(exam);
-                if (sr.findExamsGrade(exams, this.id) != -1) {
-                    System.out.println("You've already done this exam.");
-                } else {
-                    examIsNotDone = true;
-                }
-            } else {
-                System.out.println("This exam doesn't exist, please type another exam name.");
-            }
-        }
-        return exam;
+//        Exam exam = null;
+//        boolean foundExam = false;
+//        boolean examIsNotDone = false;
+//        while (!(foundExam && examIsNotDone)) {
+//            System.out.print("Please enter the name of the exam: ");
+//            String examName = sc.nextLine();
+//            foundExam = false;
+//            examIsNotDone = false;
+//            exam = qr.findExam(examName);
+//            if (exam != null) {
+//                foundExam = true;
+//                ArrayList<Exam> exams = new ArrayList<>();
+//                exams.add(exam);
+//                if (sr.findExamsGrade(exams, this.id) != -1) {
+//                    System.out.println("You've already done this exam.");
+//                } else {
+//                    examIsNotDone = true;
+//                }
+//            } else {
+//                System.out.println("This exam doesn't exist, please type another exam name.");
+//            }
+//        }
+//        return exam;
+        return null;
     }
-
 }

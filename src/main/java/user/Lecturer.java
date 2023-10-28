@@ -4,12 +4,9 @@
  */
 package user;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import model.Model;
 import questions.Exam;
-import records.QuestionRecords;
 import questions.Question;
-import questions.Score;
 import records.ScoreRecords;
 
 /**
@@ -19,7 +16,7 @@ import records.ScoreRecords;
 public class Lecturer extends User {
 
     @Override
-    public void interactionWithCUI(QuestionRecords qr, ScoreRecords sr, CUIScanner sc) {
+    public void interactionWithCUI(Model qr, ScoreRecords sr, CUIScanner sc) {
         System.out.println();
         System.out.println("What do you want to do?");
         System.out.println("Type 1 to create a new exam");
@@ -51,30 +48,30 @@ public class Lecturer extends User {
         interactionWithCUI(qr, sr, sc);
     }
 
-    public void findExamGrade(QuestionRecords qr, ScoreRecords sr, CUIScanner sc) {
-        System.out.print("Enter the name of the exam you want to check the grades of: ");
-        String examName = sc.nextLine();
-        Exam exam = qr.findExam(examName);
-        while (exam == null) {
-            System.out.print("This exam doesn't exist, type another one: ");
-            examName = sc.nextLine();
-            exam = qr.findExam(examName);
-        }
-        System.out.println("Here are the scores of every student:");
-        ArrayList<Score> scores = sr.findScores(examName);
-        for (Iterator<Score> iterator = scores.iterator(); iterator.hasNext();) {
-            Score score = iterator.next();
-            System.out.println(score.getStudentId() + ":" + score.getScore());
-        }
+    public void findExamGrade(Model qr, ScoreRecords sr, CUIScanner sc) {
+//        System.out.print("Enter the name of the exam you want to check the grades of: ");
+//        String examName = sc.nextLine();
+//        Exam exam = qr.findExam(examName);
+//        while (exam == null) {
+//            System.out.print("This exam doesn't exist, type another one: ");
+//            examName = sc.nextLine();
+//            exam = qr.findExam(examName);
+//        }
+//        System.out.println("Here are the scores of every student:");
+//        ArrayList<Score> scores = sr.findScores(examName);
+//        for (Iterator<Score> iterator = scores.iterator(); iterator.hasNext();) {
+//            Score score = iterator.next();
+//            System.out.println(score.getStudentId() + ":" + score.getScore());
+//        }
     }
 
     @Override
-    public void startCUI(QuestionRecords qr, ScoreRecords sr, CUIScanner sc) {
+    public void startCUI(Model qr, ScoreRecords sr, CUIScanner sc) {
         System.out.println("Welcome to the QnA application for lecturers!");
         interactionWithCUI(qr, sr, sc);
     }
 
-    public Exam createExam(CUIScanner sc, QuestionRecords qr) {
+    public Exam createExam(CUIScanner sc, Model qr) {
         System.out.print("Enter name of the exam: ");
         String examName = sc.nextLine();
         while (!qr.isValidExamName(examName)) {

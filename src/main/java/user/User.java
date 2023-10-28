@@ -4,7 +4,7 @@
  */
 package user;
 
-import records.QuestionRecords;
+import model.Model;
 import records.ScoreRecords;
 
 /**
@@ -13,8 +13,8 @@ import records.ScoreRecords;
  */
 public abstract class User {
 
-    public abstract void startCUI(QuestionRecords qr, ScoreRecords sr, CUIScanner sc);
+    public abstract void startCUI(Model qr, ScoreRecords sr, CUIScanner sc);
 
-    public abstract void interactionWithCUI(QuestionRecords qr, ScoreRecords sr, CUIScanner sc);
+    public abstract void interactionWithCUI(Model qr, ScoreRecords sr, CUIScanner sc);
 
 }

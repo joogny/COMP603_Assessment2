@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package records;
+package model;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -13,21 +13,39 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Observable;
 import questions.Exam;
 import questions.Question;
+import records.Records;
 
 /**
  *
  * @author Julien
  */
-public class QuestionRecords implements Records {
+public class Model extends Observable implements Records {
 
     private static final String FILEPATH = "./resources/questions.txt";
 
     private ArrayList<Question> questionRecords;
+    private Exam exam;
+    private int currentQuestionIndex;
+    private int score;
+    private boolean canQuitSafely = false;
 
-    public QuestionRecords() {
+    public Model() {
         this.questionRecords = new ArrayList<>();
+    }
+
+    public void nextQuestion() {
+        Question q = this.exam.getQuestion(currentQuestionIndex);
+        this.currentQuestionIndex++;
+        this.setChanged();
+        if (q == null) {
+            this.canQuitSafely = true;
+            notifyObservers(this.score);
+        } else {
+            notifyObservers(q);
+        }
     }
 
     public void addQuestion(Question question) {
@@ -49,8 +67,12 @@ public class QuestionRecords implements Records {
     }
 
     @Override
-    public void load() {
+    public void loadQuestions() {
+        //init Model
+        score = 0;
+        currentQuestionIndex = 0;
         questionRecords = new ArrayList<>();
+
         try {
             FileReader fr = new FileReader(FILEPATH);
             BufferedReader inputStream = new BufferedReader(fr);
@@ -66,6 +88,8 @@ public class QuestionRecords implements Records {
                 String answer = questionStringSplit[1];
 
                 questionRecords.add(new Question(question, answer, examCode, courseCode));
+
+                //temp exam
             }
         } catch (FileNotFoundException e) {
             System.err.println("File not found, couldn't get the questions");
@@ -87,7 +111,7 @@ public class QuestionRecords implements Records {
         return true;
     }
 
-    public Exam findExam(String examName) {
+    public void findExam(String examName) {
         HashSet<Question> questions = new HashSet<>();
         String courseCode = null;
         for (Iterator<Question> iterator = questionRecords.iterator(); iterator.hasNext();) {
@@ -102,10 +126,15 @@ public class QuestionRecords implements Records {
         if (courseCode != null) {
             Exam exam = new Exam(courseCode, examName);
             exam.setQuestions(questions);
-            return exam;
+            this.exam = exam;
+            setChanged();
+            notifyObservers(this.exam);
+            this.nextQuestion();
+        } else {
+            this.exam = null;
+            setChanged();
+            notifyObservers(this.exam);
         }
-
-        return null;
 
     }
 
@@ -137,6 +166,38 @@ public class QuestionRecords implements Records {
 
         }
         return exams;
+    }
+
+    public void dbsetup() {
+        this.loadQuestions();
+    }
+
+    public void updateScore(String userAnswer) {
+        boolean answerIsCorrect = questionRecords.get(this.currentQuestionIndex).answerIsCorrect(userAnswer);
+        if (answerIsCorrect) {
+            score++;
+        }
+        this.nextQuestion();
+    }
+
+    public void quitGame() {
+        if (!canQuitSafely) {
+            this.setChanged();
+            notifyObservers(this.score);
+        } else {
+            System.exit(0);
+        }
+        this.canQuitSafely = true;
+    }
+
+    public int getScore() {
+        return this.score;
+    }
+
+    public void login(String username, String password) {
+        setChanged();
+        notifyObservers(true);
+        nextQuestion();
     }
 
 }

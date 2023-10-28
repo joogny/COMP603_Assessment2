@@ -2,10 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
-package assignement1;
+package start;
 
 import user.CUIScanner;
-import records.QuestionRecords;
+import model.Model;
 import records.ScoreRecords;
 import user.Lecturer;
 import user.Student;
@@ -21,10 +21,10 @@ public class QandASystem {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        QuestionRecords qr = new QuestionRecords();
-        qr.load();
+        Model qr = new Model();
+        qr.loadQuestions();
         ScoreRecords sr = new ScoreRecords();
-        sr.load();
+        sr.loadQuestions();
         CUIScanner sc = new CUIScanner();
 
         System.out.println("Welcome to the QnA system");
