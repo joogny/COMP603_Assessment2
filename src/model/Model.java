@@ -92,7 +92,7 @@ public class Model extends Observable {
      */
     public ResultSet getUserExamResult(String userName, String examCode) throws SQLException {
         Statement statement = conn.createStatement();
-        ResultSet rs = statement.executeQuery("SELECT examName, id, score FROM StudentExam " + "WHERE id = '" + userName + "' AND examName ='" + examCode
+        ResultSet rs = statement.executeQuery("SELECT examName, id, score FROM StudentExam " + "WHERE id = '" + userName + "' AND examName = '" + examCode
                 + "'");
         return rs;
     }
@@ -124,7 +124,7 @@ public class Model extends Observable {
      * @param newTableName name of the table
      * @return true if table exist, false if it doesn't
      */
-    private boolean checkTableExisting(String newTableName) {
+    public boolean checkTableExisting(String newTableName) {
         boolean flag = false;
         try {
 
@@ -150,10 +150,13 @@ public class Model extends Observable {
         try {
             conn = DriverManager.getConnection(url, dbusername, dbpassword);
             Statement statement = conn.createStatement();
+            //statement.executeUpdate("DROP TABLE " + QUESTION_TABLE_NAME);
+            //statement.executeUpdate("DROP TABLE " + STUDENTEXAM_TABLE_NAME);
             setupQuestionTable(statement);
             setupStudentExamTable(statement);
             statement.close();
         } catch (Throwable e) {
+            System.err.println(e);
             System.err.println("Couldn't connect to DB");
         }
     }
@@ -167,13 +170,16 @@ public class Model extends Observable {
     public void setupQuestionTable(Statement statement) throws SQLException {
 
         if (!checkTableExisting(QUESTION_TABLE_NAME)) {
-            statement.executeUpdate("CREATE TABLE " + QUESTION_TABLE_NAME + " (examName VARCHAR(12), question VARCHAR(25), answer VARCHAR(25))");
-            statement.executeUpdate("INSERT INTO " + QUESTION_TABLE_NAME + " VALUES('exam_1','What is 2+2?','4'),('exam_1','What is 2+3?','5')");
+            statement.executeUpdate("CREATE TABLE " + QUESTION_TABLE_NAME + " (examName VARCHAR(12), question VARCHAR(100), answer VARCHAR(25))");
+            //math_exam
+            statement.executeUpdate("INSERT INTO " + QUESTION_TABLE_NAME + " VALUES('math_exam','What is 2+2?','4'),('math_exam','What is 2+3?','5'),('math_exam','What is 2/2?','1'),('math_exam','What is 10*2?','20'),('math_exam','What is 5/2?','2.5')");
+            //cs_exam
+            statement.executeUpdate("INSERT INTO " + QUESTION_TABLE_NAME + " VALUES('cs_exam',' What is a collection of data items?','Array'),('cs_exam','What is a programming error causing the program to terminate abruptly?','Bug'),('cs_exam','What organizes code into reusable parts?','Function'),('cs_exam','What represents a condition with two outcomes?','Boolean')");
         }
     }
 
     /**
-     * Create StduentExam table and add values
+     * Create StudentExam table and add values
      *
      * @param statement
      * @throws SQLException
@@ -182,7 +188,7 @@ public class Model extends Observable {
 
         if (!checkTableExisting(STUDENTEXAM_TABLE_NAME)) {
             statement.executeUpdate("CREATE TABLE " + STUDENTEXAM_TABLE_NAME + " (examName VARCHAR(12), id VARCHAR(12), score INT)");
-            statement.executeUpdate("INSERT INTO " + STUDENTEXAM_TABLE_NAME + " VALUES('exam_1','23194961',2),('exam_1','23194962',0)");
+            statement.executeUpdate("INSERT INTO " + STUDENTEXAM_TABLE_NAME + " VALUES('math_exam','Julien',5),('cs_exam','Julien',3)");
         }
     }
 
@@ -225,7 +231,7 @@ public class Model extends Observable {
      * @param id student id
      * @param examCode
      */
-    private void saveScore(int score, String id, String examCode) {
+    public void saveScore(int score, String id, String examCode) {
         try {
             Statement statement = conn.createStatement();
             statement.executeUpdate("INSERT INTO " + STUDENTEXAM_TABLE_NAME + " VALUES('" + examCode + "','" + id + "'," + score + ")");
@@ -267,6 +273,10 @@ public class Model extends Observable {
         this.setChanged();
         notifyObservers(score);
         return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 
 }

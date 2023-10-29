@@ -7,18 +7,15 @@ import java.util.Observable;
 import java.util.Observer;
 import javax.swing.*;
 import model.ActionType;
-import model.Model;
 import model.Exam;
+import model.Model;
 
 
 /*
 TODO:
-JUnit at least 5
 Go back to menu
 More specific errors?
-More DB values
 DB autostart
-Comments
  */
 public class ExamCodeView extends JFrame implements Observer {
 

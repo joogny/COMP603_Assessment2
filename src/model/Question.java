@@ -23,7 +23,7 @@ public class Question {
     }
 
     public boolean answerIsCorrect(String userAnswer) {
-        return userAnswer.equals(answer);
+        return userAnswer.equalsIgnoreCase(answer);
     }
 
 }
