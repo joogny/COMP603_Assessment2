@@ -32,8 +32,4 @@ public class NextQuestionController implements ActionListener {
         this.view = v;
     }
 
-    public void quitGame() {
-        this.model.stopGame();
-    }
-
 }
