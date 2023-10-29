@@ -29,6 +29,7 @@ public class ChooseExamController implements ActionListener {
     }
 
     @Override
+    //on button click start exam with input examCode
     public void actionPerformed(ActionEvent e) {
         String examCode = view.getExamCodeInput().getText();
         model.startExam(examCode);

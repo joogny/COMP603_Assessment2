@@ -1,4 +1,4 @@
-package start;
+package model;
 
 import controller.ChooseExamController;
 import controller.ExamResultsController;
@@ -12,7 +12,7 @@ import view.ExamCodeView;
 import view.LogInView;
 import view.QuestionView;
 
-public class QuizMain {
+public class Quiz {
 
     public static void main(String[] args) {
         Model model = new Model();

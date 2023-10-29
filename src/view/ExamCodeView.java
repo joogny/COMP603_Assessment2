@@ -8,14 +8,17 @@ import java.util.Observer;
 import javax.swing.*;
 import model.ActionType;
 import model.Model;
-import questions.Exam;
+import model.Exam;
 
 
 /*
 TODO:
-JUnit
-Display results
-Maybe files?
+JUnit at least 5
+Go back to menu
+More specific errors?
+More DB values
+DB autostart
+Comments
  */
 public class ExamCodeView extends JFrame implements Observer {
 
@@ -62,9 +65,14 @@ public class ExamCodeView extends JFrame implements Observer {
         seeExamResultsButton.addActionListener(c);
     }
 
-    public void displayForUser(ActionType userType) {
-        this.userType = userType;
-        if (userType == ActionType.PASS_EXAM) {
+    /**
+     * Depending on the actionType we display a different buttons and text
+     *
+     * @param actionType
+     */
+    public void displayForUser(ActionType actionType) {
+        this.userType = actionType;
+        if (actionType == ActionType.PASS_EXAM) {
             passExamButton.setVisible(true);
             seeExamResultsButton.setVisible(false);
             examCodeLabel.setText("Enter the name of the exam you want to start: ");
@@ -78,6 +86,15 @@ public class ExamCodeView extends JFrame implements Observer {
 
     }
 
+    private void displayScore(int score) {
+        infoLabel.setVisible(true);
+        if (score != -1) {
+            infoLabel.setText("You scored " + score);
+        } else {
+            infoLabel.setText("You have no scores for this exam");
+        }
+    }
+
     @Override
     public void update(Observable o, Object object) {
         if (o instanceof Model) {
@@ -85,17 +102,12 @@ public class ExamCodeView extends JFrame implements Observer {
                 this.displayForUser((ActionType) object);
             }
             if (object instanceof Integer) {
-                int score = (Integer) object;
-                infoLabel.setVisible(true);
-                if (score != -1) {
-                    infoLabel.setText("You scored " + score);
-                } else {
-                    infoLabel.setText("You have no scores for this exam");
-                }
+                this.displayScore((Integer) object);
             }
             if (object == null) {
                 infoLabel.setVisible(true);
-            } else if (object instanceof Exam) {
+            }
+            if (object instanceof Exam) {
                 this.setVisible(false);
             }
         }

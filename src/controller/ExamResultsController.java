@@ -27,6 +27,7 @@ public class ExamResultsController implements ActionListener {
     }
 
     @Override
+    //on button click display result of exam with input examCode
     public void actionPerformed(ActionEvent e) {
         String examCode = view.getExamCodeInput().getText();
         model.getPreviousScore(examCode);

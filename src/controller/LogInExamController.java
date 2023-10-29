@@ -6,8 +6,8 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import model.Model;
 import model.ActionType;
+import model.Model;
 import view.LogInView;
 
 /**
@@ -28,6 +28,7 @@ public class LogInExamController implements ActionListener {
     }
 
     @Override
+    //login in model to pass exam
     public void actionPerformed(ActionEvent e) {
         String username = view.getUserNameInput().getText();
         if (username.length() == 0) {

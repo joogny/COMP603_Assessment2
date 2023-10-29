@@ -11,8 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Observable;
-import questions.Exam;
-import questions.Question;
 
 /**
  *
@@ -38,6 +36,9 @@ public class Model extends Observable {
         score = 0;
     }
 
+    /**
+     * set the next question and notify the view of the new question
+     */
     public void nextQuestion() {
         this.exam.nextQuestion();
         Question q = this.exam.getCurrentQuestion();
@@ -56,6 +57,13 @@ public class Model extends Observable {
         notifyObservers(this.exam);
     }
 
+    /**
+     * Find an exam with the examName
+     *
+     * @param examName name of the exam
+     * @return null if exam isn't found, else the exam with all its questions
+     * @throws SQLException
+     */
     public Exam findExam(String examName) throws SQLException {
         Statement statement = conn.createStatement();
         ResultSet rs = statement.executeQuery("SELECT examName, question, answer FROM Question " + "WHERE examName = '" + examName + "'");
@@ -74,6 +82,14 @@ public class Model extends Observable {
         return exam;
     }
 
+    /**
+     * get the score of a user on a specific exam
+     *
+     * @param userName name of the user
+     * @param examCode code of the exam
+     * @return resultSet of the scores
+     * @throws SQLException
+     */
     public ResultSet getUserExamResult(String userName, String examCode) throws SQLException {
         Statement statement = conn.createStatement();
         ResultSet rs = statement.executeQuery("SELECT examName, id, score FROM StudentExam " + "WHERE id = '" + userName + "' AND examName ='" + examCode
@@ -83,23 +99,31 @@ public class Model extends Observable {
 
     public void startExam(String examName) {
         try {
-            if (getUserExamResult(userName, examName).next()) {
+            boolean userHasDoneExam = getUserExamResult(userName, examName).next();
+            if (userHasDoneExam) {
+                //if user has already done the exam, view will display a message
                 setExam(null);
                 return;
             }
             Exam exam = findExam(examName);
             if (exam != null) {
+                //if exam is found, display the next question
                 setExam(exam);
                 this.nextQuestion();
             } else {
                 setExam(null);
             }
         } catch (SQLException ex) {
-            System.err.println(ex);
             System.err.println("Couldn't start the exam");
         }
     }
 
+    /**
+     * Check if a table already exist
+     *
+     * @param newTableName name of the table
+     * @return true if table exist, false if it doesn't
+     */
     private boolean checkTableExisting(String newTableName) {
         boolean flag = false;
         try {
@@ -107,7 +131,6 @@ public class Model extends Observable {
             String[] types = {"TABLE"};
             DatabaseMetaData dbmd = conn.getMetaData();
             ResultSet rsDBMeta = dbmd.getTables(null, null, null, null);//types);
-            //Statement dropStatement = null;
             while (rsDBMeta.next()) {
                 String tableName = rsDBMeta.getString("TABLE_NAME");
                 if (tableName.compareToIgnoreCase(newTableName) == 0) {
@@ -135,6 +158,12 @@ public class Model extends Observable {
         }
     }
 
+    /**
+     * Create Question table and add values
+     *
+     * @param statement
+     * @throws SQLException
+     */
     public void setupQuestionTable(Statement statement) throws SQLException {
 
         if (!checkTableExisting(QUESTION_TABLE_NAME)) {
@@ -143,6 +172,12 @@ public class Model extends Observable {
         }
     }
 
+    /**
+     * Create StduentExam table and add values
+     *
+     * @param statement
+     * @throws SQLException
+     */
     public void setupStudentExamTable(Statement statement) throws SQLException {
 
         if (!checkTableExisting(STUDENTEXAM_TABLE_NAME)) {
@@ -151,6 +186,11 @@ public class Model extends Observable {
         }
     }
 
+    /**
+     * Update score depending on user answer and get next question
+     *
+     * @param userAnswer
+     */
     public void updateScore(String userAnswer) {
         boolean answerIsCorrect = exam.getCurrentQuestion().answerIsCorrect(userAnswer);
         if (answerIsCorrect) {
@@ -160,6 +200,7 @@ public class Model extends Observable {
     }
 
     public void stopGame() {
+        //user isn't allowed to quit the program in the middle of the exam, his current score will be displayed first
         if (!canQuitSafely) {
             this.setChanged();
             notifyObservers(this.score);
@@ -169,11 +210,21 @@ public class Model extends Observable {
         this.canQuitSafely = true;
     }
 
+    /**
+     * Save score and exit program
+     */
     public void saveScore() {
         saveScore(score, userName, this.exam.getExamCode());
         System.exit(0);
     }
 
+    /**
+     * Insert exam result into the database
+     *
+     * @param score exam score
+     * @param id student id
+     * @param examCode
+     */
     private void saveScore(int score, String id, String examCode) {
         try {
             Statement statement = conn.createStatement();
@@ -195,6 +246,13 @@ public class Model extends Observable {
         notifyObservers(userType);
     }
 
+    /**
+     * Get the previous score of current user on a specific exam or -1 if he
+     * doesn't have a score
+     *
+     * @param examCode
+     * @return
+     */
     public int getPreviousScore(String examCode) {
         ResultSet rs;
         int score = -1;

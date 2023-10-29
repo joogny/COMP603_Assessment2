@@ -28,6 +28,7 @@ public class LogInResultsController implements ActionListener {
     }
 
     @Override
+    //login in model to see results
     public void actionPerformed(ActionEvent e) {
         String username = view.getUserNameInput().getText();
         if (username.length() == 0) {

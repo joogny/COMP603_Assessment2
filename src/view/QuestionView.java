@@ -7,8 +7,8 @@ import java.util.Observable;
 import java.util.Observer;
 import javax.swing.*;
 import model.Model;
-import questions.Exam;
-import questions.Question;
+import model.Exam;
+import model.Question;
 
 public class QuestionView extends JFrame implements Observer {
 
@@ -34,6 +34,9 @@ public class QuestionView extends JFrame implements Observer {
 
     }
 
+    /**
+     * Display panel and buttons
+     */
     void startQuiz() {
         questionPanel.add(question);
         questionPanel.add(calcSolution);
@@ -62,6 +65,11 @@ public class QuestionView extends JFrame implements Observer {
         this.saveAndQuitButton.addActionListener(c);
     }
 
+    /**
+     * Display question on the GUI
+     *
+     * @param q
+     */
     private void displayQuestion(Question q) {
         this.question.setText(q.toString() + "");
         this.calcSolution.setText("");
@@ -84,6 +92,11 @@ public class QuestionView extends JFrame implements Observer {
 
     }
 
+    /**
+     * Display final score on the GUI
+     *
+     * @param score
+     */
     private void displayScore(Integer score) {
         this.question.setText("You scored " + score);
         this.calcSolution.setVisible(false);

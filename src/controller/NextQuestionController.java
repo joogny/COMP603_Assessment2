@@ -18,19 +18,17 @@ public class NextQuestionController implements ActionListener {
     }
 
     @Override
+
     public void actionPerformed(ActionEvent e) {
-        System.out.println("You clicked the next button");
         String userAnswer = view.getCalcSolution().getText();
         model.updateScore(userAnswer);
     }
 
     public void addModel(Model m) {
-        System.out.println("Controller: adding model");
         this.model = m;
     }
 
     public void addView(QuestionView v) {
-        System.out.println("Controller: adding view");
         this.view = v;
     }
 
