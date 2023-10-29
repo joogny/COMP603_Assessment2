@@ -14,11 +14,9 @@ import java.util.Iterator;
 public class Exam {
 
     private HashSet<Question> questions;
-    private String courseCode;
     private String examName;
 
-    public Exam(String courseCode, String examCode) {
-        this.courseCode = courseCode;
+    public Exam(String examCode) {
         questions = new HashSet<>();
         this.examName = examCode;
     }
@@ -45,10 +43,6 @@ public class Exam {
             currentIndex++;
         }
         return null;
-    }
-
-    public String getCourseCode() {
-        return courseCode;
     }
 
     public void setQuestions(HashSet<Question> questions) {

@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Sun Oct 29 13:43:16 NZDT 2023:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-018b-78e2-935e-000006acf1b8 
+on database directory /home/julien/NetBeansProjects/COMP603_Assignment2/QuestionDB with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@d716361 
+Loaded from file:/home/julien/NetBeansProjects/COMP603_Assignment2/lib/derby.jar
+java.vendor=Ubuntu
+java.runtime.version=11.0.20.1+1-post-Ubuntu-0ubuntu122.04
+user.dir=/home/julien/NetBeansProjects/COMP603_Assignment2
+os.name=Linux
+os.arch=amd64
+os.version=6.5.4-76060504-generic
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''

@@ -4,8 +4,6 @@
  */
 package questions;
 
-import java.util.UUID;
-
 /**
  *
  * @author Julien
@@ -14,17 +12,9 @@ public class Question {
 
     protected String question;
     protected String answer;
-    protected String courseCode;
-    protected String examName;
 
-    public String getExamName() {
-        return examName;
-    }
-
-    public Question(String question, String answer, String examCode, String courseCode) {
+    public Question(String question, String answer) {
         this.question = question;
-        this.courseCode = courseCode;
-        this.examName = examCode;
         this.answer = answer;
     }
 
@@ -34,14 +24,6 @@ public class Question {
 
     public boolean answerIsCorrect(String userAnswer) {
         return userAnswer.equals(answer);
-    }
-
-    public String formatForFile() {
-        return courseCode + "/" + examName + "/" + question + ":" + answer;
-    }
-
-    public String getCourseCode() {
-        return courseCode;
     }
 
 }

@@ -4,40 +4,30 @@
  */
 package model;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Observable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import questions.Exam;
 import questions.Question;
-import records.Records;
 
 /**
  *
  * @author Julien
  */
-public class Model extends Observable implements Records {
+public class Model extends Observable {
 
-    private static final String FILEPATH = "./resources/questions.txt";
     Connection conn = null;
 
     String url = "jdbc:derby:QuestionDB;create=true";  //url of the DB host
     String dbusername = "pdc";  //your DB username
     String dbpassword = "pdc";   //your DB password
 
-    private ArrayList<Question> questionRecords;
     private Exam exam;
     private int currentQuestionIndex;
     private int score;
@@ -46,7 +36,8 @@ public class Model extends Observable implements Records {
     private UserType userType;
 
     public Model() {
-        this.questionRecords = new ArrayList<>();
+        score = 0;
+        currentQuestionIndex = 0;
     }
 
     public void nextQuestion() {
@@ -61,131 +52,55 @@ public class Model extends Observable implements Records {
         }
     }
 
-    public void addQuestion(Question question) {
-        this.questionRecords.add(question);
-    }
-
-    @Override
-    public void save() {
-        try {
-            PrintWriter pw = new PrintWriter(new FileOutputStream(FILEPATH));
-            for (Iterator<Question> iterator = questionRecords.iterator(); iterator.hasNext();) {
-                Question question = iterator.next();
-                pw.println(question.formatForFile());
-            }
-            pw.close();
-        } catch (FileNotFoundException ex) {
-            System.err.println("The questions file is not here, questions were not saved");
-        }
-    }
-
-    @Override
-    public void loadQuestions() {
-        //init Model
-        score = 0;
-        currentQuestionIndex = 0;
-        questionRecords = new ArrayList<>();
-
-        try {
-            FileReader fr = new FileReader(FILEPATH);
-            BufferedReader inputStream = new BufferedReader(fr);
-            String line = null;
-            while ((line = inputStream.readLine()) != null) {
-                String[] splitString = line.split("/");
-
-                String courseCode = splitString[0];
-                String examCode = splitString[1];
-                String questionString = splitString[2];
-                String[] questionStringSplit = questionString.split(":");
-                String question = questionStringSplit[0];
-                String answer = questionStringSplit[1];
-
-                questionRecords.add(new Question(question, answer, examCode, courseCode));
-
-                //temp exam
-            }
-        } catch (FileNotFoundException e) {
-            System.err.println("File not found, couldn't get the questions");
-        } catch (IOException ex) {
-            System.err.println("Error reading from file " + FILEPATH + ", couldn't get the questions");
-        } catch (ArrayIndexOutOfBoundsException ex) {
-            System.err.println("The file is not formatted properly, couldn't get the questions");
-        }
-
-    }
-
     public boolean isValidExamName(String examName) {
-        for (Iterator<Question> iterator = questionRecords.iterator(); iterator.hasNext();) {
-            Question question = iterator.next();
-            if (question.getExamName().equalsIgnoreCase(examName)) {
-                return false;
-            }
-        }
+        //SQL check if question with this exam exist
         return true;
     }
 
+    public void updateExam(Exam exam) {
+        this.exam = exam;
+        this.setChanged();
+        notifyObservers(this.exam);
+    }
+
     public void findExam(String examName) {
-        HashSet<Question> questions = new HashSet<>();
-        String courseCode = null;
-        for (Iterator<Question> iterator = questionRecords.iterator(); iterator.hasNext();) {
-            Question q = iterator.next();
-            if (q.getExamName().equalsIgnoreCase(examName)) {
-                questions.add(q);
-                if (courseCode == null) {
-                    courseCode = q.getCourseCode();
-                }
-            }
-        }
-        if (courseCode != null) {
-            Exam exam = new Exam(courseCode, examName);
-            exam.setQuestions(questions);
-            this.exam = exam;
-            setChanged();
-            notifyObservers(this.exam);
-            this.nextQuestion();
-        } else {
-            this.exam = null;
-            setChanged();
-            notifyObservers(this.exam);
-        }
-
-    }
-
-    public int getCourseMaxScore(String course) {
-        int maxScore = 0;
-        for (Iterator<Question> iterator = questionRecords.iterator(); iterator.hasNext();) {
-            Question q = iterator.next();
-            if (q.getCourseCode().equalsIgnoreCase(course)) {
-                maxScore++;
-            }
-        }
-        return maxScore;
-    }
-
-    public ArrayList<Exam> getExams(String course) {
-        ArrayList<Exam> exams = new ArrayList<>();
-        for (Iterator<Question> iterator = questionRecords.iterator(); iterator.hasNext();) {
-            Question q = iterator.next();
-            if (q.getCourseCode().equalsIgnoreCase(course)) {
-                Exam exam = new Exam(course, q.getExamName());
-                int examIndex = exams.indexOf(exam);
-                if (examIndex != -1) {
-                    exams.get(examIndex).addQuestion(q);
-                } else {
-                    exam.addQuestion(q);
-                    exams.add(exam);
-                }
+        //SQL = find exam with examName and StudentID!=currentID
+        //find questions of exam
+        try {
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT examName, id FROM StudentExam " + "WHERE id = '" + this.userName + "' AND examName ='" + examName
+                    + "'");
+            if (rs.next()) {
+                System.out.println("Exam is already done by student");
+                updateExam(null);
+                return;
             }
 
+            rs = statement.executeQuery("SELECT examName, question, answer FROM Question " + "WHERE examName = '" + examName + "'");
+            Exam exam = new Exam(examName);
+            boolean hasQuestions = false;
+            while (rs.next()) {
+                hasQuestions = true;
+                String question = rs.getString("question");
+                System.out.println(question);
+                String answer = rs.getString("answer");
+                exam.addQuestion(new Question(question, answer));
+            }
+            if (hasQuestions) {
+                updateExam(exam);
+                this.nextQuestion();
+            } else {
+                //display that exam doesnt exist
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return exams;
     }
 
     private boolean checkTableExisting(String newTableName) {
         boolean flag = false;
         try {
 
-            System.out.println("check existing tables.... ");
             String[] types = {"TABLE"};
             DatabaseMetaData dbmd = conn.getMetaData();
             ResultSet rsDBMeta = dbmd.getTables(null, null, null, null);//types);
@@ -193,7 +108,6 @@ public class Model extends Observable implements Records {
             while (rsDBMeta.next()) {
                 String tableName = rsDBMeta.getString("TABLE_NAME");
                 if (tableName.compareToIgnoreCase(newTableName) == 0) {
-                    System.out.println(tableName + "  is there");
                     flag = true;
                 }
             }
@@ -209,23 +123,34 @@ public class Model extends Observable implements Records {
         try {
             conn = DriverManager.getConnection(url, dbusername, dbpassword);
             Statement statement = conn.createStatement();
-            String tableName = "Question";
-
-            if (!checkTableExisting(tableName)) {
-                statement.executeUpdate("CREATE TABLE " + tableName + " (questionId VARCHAR(12), examName VARCHAR(12),question VARCHAR(25)");
-            }
-            statement.executeUpdate("INSERT INTO " + tableName + " VALUES('exam_1','What is 2+2'),('exam_1','What is 2+3')");
+            setupQuestionTable(statement);
+            setupStudentExamTable(statement);
             statement.close();
-
         } catch (Throwable e) {
             System.err.println(e);
-
         }
-        this.loadQuestions();
+    }
+
+    public void setupQuestionTable(Statement statement) throws SQLException {
+        String tableName = "Question";
+
+        if (!checkTableExisting(tableName)) {
+            statement.executeUpdate("CREATE TABLE " + tableName + " (examName VARCHAR(12), question VARCHAR(25), answer VARCHAR(25))");
+            statement.executeUpdate("INSERT INTO " + tableName + " VALUES('exam_1','What is 2+2?','4'),('exam_1','What is 2+3?','5')");
+        }
+    }
+
+    public void setupStudentExamTable(Statement statement) throws SQLException {
+        String tableName = "StudentExam";
+
+        if (!checkTableExisting(tableName)) {
+            statement.executeUpdate("CREATE TABLE " + tableName + " (examName VARCHAR(12), id VARCHAR(12), score INT)");
+            statement.executeUpdate("INSERT INTO " + tableName + " VALUES('exam_1','23194961',2),('exam_1','23194962',0)");
+        }
     }
 
     public void updateScore(String userAnswer) {
-        boolean answerIsCorrect = questionRecords.get(this.currentQuestionIndex).answerIsCorrect(userAnswer);
+        boolean answerIsCorrect = exam.getQuestion(this.currentQuestionIndex - 1).answerIsCorrect(userAnswer);
         if (answerIsCorrect) {
             score++;
         }
