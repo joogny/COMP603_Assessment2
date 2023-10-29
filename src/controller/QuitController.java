@@ -21,7 +21,7 @@ public class QuitController implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent ae) {
 
-        model.quitGame();
+        model.stopGame();
     }
 
     public void addModel(Model m) {

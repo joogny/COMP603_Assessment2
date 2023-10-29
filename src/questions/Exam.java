@@ -15,6 +15,8 @@ public class Exam {
 
     private HashSet<Question> questions;
     private String examName;
+    private Question currentQuestion;
+    private int currentQuestionIndex = 0;
 
     public Exam(String examCode) {
         questions = new HashSet<>();
@@ -29,20 +31,26 @@ public class Exam {
         questions.add(q);
     }
 
+    public Question getCurrentQuestion() {
+        return currentQuestion;
+    }
+
     public HashSet<Question> getQuestions() {
         return questions;
     }
 
-    public Question getQuestion(int questionIndex) {
+    public void nextQuestion() {
         int currentIndex = 0;
         for (Iterator<Question> iterator = questions.iterator(); iterator.hasNext();) {
             Question next = iterator.next();
-            if (currentIndex == questionIndex) {
-                return next;
+            if (currentIndex == currentQuestionIndex) {
+                this.currentQuestionIndex++;
+                this.currentQuestion = next;
+                return;
             }
             currentIndex++;
         }
-        return null;
+        this.currentQuestion = null;
     }
 
     public void setQuestions(HashSet<Question> questions) {

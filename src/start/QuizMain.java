@@ -5,6 +5,7 @@ import controller.LogInStudentController;
 import controller.LogInTeacherController;
 import controller.NextQuestionController;
 import controller.QuitController;
+import controller.SaveScoreController;
 import model.Model;
 import view.ExamCodeView;
 import view.LogInView;
@@ -14,9 +15,14 @@ public class QuizMain {
 
     public static void main(String[] args) {
         Model model = new Model();
-        QuestionView view = new QuestionView();
+        QuestionView questionView = new QuestionView();
         ExamCodeView examCodeView = new ExamCodeView();
         LogInView logInView = new LogInView();
+
+        SaveScoreController saveScoreController = new SaveScoreController();
+        saveScoreController.addModel(model);
+        saveScoreController.addView(questionView);
+        questionView.addSaveQuitButtonController(saveScoreController);
 
         NextQuestionController nextQuestionController = new NextQuestionController();
         ChooseExamController chooseExamController = new ChooseExamController();
@@ -27,7 +33,7 @@ public class QuizMain {
         logInView.addTeacherLoginController(logInTeacherController);
         logInView.addStudentLoginController(logInStudentController);
 
-        model.addObserver(view);
+        model.addObserver(questionView);
         model.addObserver(examCodeView);
         model.addObserver(logInView);
 
@@ -37,18 +43,18 @@ public class QuizMain {
         logInStudentController.addModel(model);
 
         nextQuestionController.addModel(model);
-        nextQuestionController.addView(view);
+        nextQuestionController.addView(questionView);
         nextQuestionController.initModel();
 
         chooseExamController.addModel(model);
         chooseExamController.addView(examCodeView);
 
         quitController.addModel(model);
-        quitController.addView(view);
+        quitController.addView(questionView);
 
-        view.addNextButtonController(nextQuestionController);
+        questionView.addNextButtonController(nextQuestionController);
         examCodeView.addChooseExamController(chooseExamController);
-        view.addQuitButtonController(quitController);
+        questionView.addQuitButtonController(quitController);
 
         logInView.setVisible(true);
     }

@@ -24,7 +24,7 @@ public class ExamCodeView extends JFrame implements Observer {
     private JLabel examCodeLabel = new JLabel();
     private JTextField examCodeInput = new JTextField(10);
 
-    private JLabel wrongExamCode = new JLabel("Exam doesn't exist");
+    private JLabel wrongExamCode = new JLabel("Exam doesn't exist or you have already done it");
 
     private JButton quitButton = new JButton("Quit");
     private JButton studentChooseExamButton = new JButton("Choose exam");

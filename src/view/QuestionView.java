@@ -2,6 +2,7 @@ package view;
 
 import controller.NextQuestionController;
 import controller.QuitController;
+import controller.SaveScoreController;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.*;
@@ -19,6 +20,8 @@ public class QuestionView extends JFrame implements Observer {
     private JButton nextButton = new JButton("Next");
     private JButton quitButton = new JButton("Quit");
 
+    private JButton saveAndQuitButton = new JButton("Save score and quit");
+
     private JTextField calcSolution = new JTextField(10);
 
     public JTextField getCalcSolution() {
@@ -34,39 +37,14 @@ public class QuestionView extends JFrame implements Observer {
     void startQuiz() {
         questionPanel.add(question);
         questionPanel.add(calcSolution);
+        questionPanel.add(saveAndQuitButton);
+        saveAndQuitButton.setVisible(false);
         questionPanel.add(nextButton);
         questionPanel.add(quitButton);
 
         this.getContentPane().removeAll();
         questionPanel.setVisible(true);
         this.add(questionPanel);
-        this.revalidate();
-        this.repaint();
-
-    }
-
-    void startFinding() {
-
-        questionPanel.add(question);
-
-        questionPanel.add(calcSolution);
-        questionPanel.add(nextButton);
-        questionPanel.add(quitButton);
-        this.getContentPane().removeAll();
-        questionPanel.setVisible(true);
-        this.add(questionPanel);
-        this.revalidate();
-        this.repaint();
-
-    }
-
-    void quitGame(int score) {
-        JPanel quitPanel = new JPanel();
-        JLabel scoreLabel = new JLabel("Your score: " + score);
-        quitPanel.add(scoreLabel);
-        this.getContentPane().removeAll();
-        //calcPanel.setVisible(true);
-        this.add(quitPanel);
         this.revalidate();
         this.repaint();
 
@@ -78,6 +56,10 @@ public class QuestionView extends JFrame implements Observer {
 
     public void addQuitButtonController(QuitController c) {
         quitButton.addActionListener(c);
+    }
+
+    public void addSaveQuitButtonController(SaveScoreController c) {
+        this.saveAndQuitButton.addActionListener(c);
     }
 
     private void displayQuestion(Question q) {
@@ -106,6 +88,8 @@ public class QuestionView extends JFrame implements Observer {
         this.question.setText("You scored " + score);
         this.calcSolution.setVisible(false);
         this.nextButton.setVisible(false);
+        this.saveAndQuitButton.setVisible(true);
+        this.quitButton.setVisible(false);
         this.questionPanel.repaint();
     }
 }
