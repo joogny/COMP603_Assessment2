@@ -6,15 +6,15 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import model.ActionType;
 import model.Model;
-import model.UserType;
 import view.LogInView;
 
 /**
  *
  * @author julien
  */
-public class LogInStudentController implements ActionListener {
+public class LogInResultsController implements ActionListener {
 
     Model model;
     LogInView view;
@@ -33,7 +33,7 @@ public class LogInStudentController implements ActionListener {
         if (username.length() == 0) {
             view.getEmptyInput().setVisible(true);
         } else {
-            model.login(username, UserType.STUDENT);
+            model.login(username, ActionType.RESULTS);
         }
     }
 

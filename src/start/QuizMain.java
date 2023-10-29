@@ -1,8 +1,9 @@
 package start;
 
 import controller.ChooseExamController;
-import controller.LogInStudentController;
-import controller.LogInTeacherController;
+import controller.ExamResultsController;
+import controller.LogInExamController;
+import controller.LogInResultsController;
 import controller.NextQuestionController;
 import controller.QuitController;
 import controller.SaveScoreController;
@@ -24,11 +25,16 @@ public class QuizMain {
         saveScoreController.addView(questionView);
         questionView.addSaveQuitButtonController(saveScoreController);
 
+        ExamResultsController examResultsController = new ExamResultsController();
+        examResultsController.addView(examCodeView);
+        examResultsController.addModel(model);
+        examCodeView.addExamResultsController(examResultsController);
+
         NextQuestionController nextQuestionController = new NextQuestionController();
         ChooseExamController chooseExamController = new ChooseExamController();
         QuitController quitController = new QuitController();
-        LogInStudentController logInStudentController = new LogInStudentController();
-        LogInTeacherController logInTeacherController = new LogInTeacherController();
+        LogInExamController logInStudentController = new LogInExamController();
+        LogInResultsController logInTeacherController = new LogInResultsController();
 
         logInView.addTeacherLoginController(logInTeacherController);
         logInView.addStudentLoginController(logInStudentController);

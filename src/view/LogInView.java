@@ -5,8 +5,8 @@
 package view;
 
 import controller.ChooseExamController;
-import controller.LogInStudentController;
-import controller.LogInTeacherController;
+import controller.LogInExamController;
+import controller.LogInResultsController;
 import controller.QuitController;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,8 +17,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import model.ActionType;
 import model.Model;
-import model.UserType;
 
 /**
  *
@@ -34,16 +34,16 @@ public class LogInView extends JFrame implements Observer {
     private JLabel emptyInput = new JLabel("Please input a name");
 
     private JButton quitButton = new JButton("Quit");
-    private JButton studentLogIn = new JButton("Log in as student");
-    private JButton teacherLogIn = new JButton("Log in as teacher");
+    private JButton examLogIn = new JButton("Pass exam");
+    private JButton resultsLogIn = new JButton("See results");
 
     public LogInView() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(600, 200);
         panel.add(userNameLabel);
         panel.add(userNameInput);
-        panel.add(studentLogIn);
-        panel.add(teacherLogIn);
+        panel.add(examLogIn);
+        panel.add(resultsLogIn);
         panel.add(emptyInput);
         emptyInput.setVisible(false);
         quitButton.addActionListener(new ActionListener() {
@@ -55,12 +55,12 @@ public class LogInView extends JFrame implements Observer {
 
     }
 
-    public void addTeacherLoginController(LogInTeacherController c) {
-        this.teacherLogIn.addActionListener(c);
+    public void addTeacherLoginController(LogInResultsController c) {
+        this.resultsLogIn.addActionListener(c);
     }
 
-    public void addStudentLoginController(LogInStudentController c) {
-        this.studentLogIn.addActionListener(c);
+    public void addStudentLoginController(LogInExamController c) {
+        this.examLogIn.addActionListener(c);
     }
 
     public JTextField getUserNameInput() {
@@ -72,7 +72,7 @@ public class LogInView extends JFrame implements Observer {
     }
 
     public void addChooseExamController(ChooseExamController c) {
-        studentLogIn.addActionListener(c);
+        examLogIn.addActionListener(c);
     }
 
     public void addQuitButtonController(QuitController c) {
@@ -82,7 +82,7 @@ public class LogInView extends JFrame implements Observer {
     @Override
     public void update(Observable o, Object object) {
         if (o instanceof Model) {
-            if (object instanceof UserType) {
+            if (object instanceof ActionType) {
                 this.setVisible(false);
             }
         }

@@ -8,7 +8,7 @@ package model;
  *
  * @author julien
  */
-public enum UserType {
-    TEACHER,
-    STUDENT
+public enum ActionType {
+    RESULTS,
+    PASS_EXAM
 }

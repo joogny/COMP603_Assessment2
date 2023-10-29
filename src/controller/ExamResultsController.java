@@ -7,29 +7,28 @@ package controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import model.Model;
-import model.UserType;
-import view.LogInView;
+import view.ExamCodeView;
 
 /**
  *
  * @author julien
  */
-public class LogInTeacherController implements ActionListener {
+public class ExamResultsController implements ActionListener {
 
     Model model;
-    LogInView view;
+    ExamCodeView view;
 
     public void addModel(Model m) {
         this.model = m;
     }
 
-    public void addView(LogInView v) {
+    public void addView(ExamCodeView v) {
         this.view = v;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        model.login("", UserType.TEACHER);
+        String examCode = view.getExamCodeInput().getText();
+        model.getPreviousScore(examCode);
     }
-
 }

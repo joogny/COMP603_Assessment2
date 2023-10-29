@@ -11,8 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Observable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import questions.Exam;
 import questions.Question;
 
@@ -34,7 +32,7 @@ public class Model extends Observable {
     private int score;
     private boolean canQuitSafely = false;
     private String userName;
-    private UserType userType;
+    private ActionType userType;
 
     public Model() {
         score = 0;
@@ -52,45 +50,53 @@ public class Model extends Observable {
         }
     }
 
-    public boolean isValidExamName(String examName) {
-        //SQL check if question with this exam exist
-        return true;
-    }
-
     public void setExam(Exam exam) {
         this.exam = exam;
         this.setChanged();
         notifyObservers(this.exam);
     }
 
-    public void findExam(String examName) {
+    public Exam findExam(String examName) throws SQLException {
+        Statement statement = conn.createStatement();
+        ResultSet rs = statement.executeQuery("SELECT examName, question, answer FROM Question " + "WHERE examName = '" + examName + "'");
+        Exam exam = new Exam(examName);
+        boolean hasQuestions = false;
+        while (rs.next()) {
+            hasQuestions = true;
+            String question = rs.getString("question");
+            String answer = rs.getString("answer");
+            exam.addQuestion(new Question(question, answer));
+        }
+        statement.close();
+        if (!hasQuestions) {
+            return null;
+        }
+        return exam;
+    }
+
+    public ResultSet getUserExamResult(String userName, String examCode) throws SQLException {
+        Statement statement = conn.createStatement();
+        ResultSet rs = statement.executeQuery("SELECT examName, id, score FROM StudentExam " + "WHERE id = '" + userName + "' AND examName ='" + examCode
+                + "'");
+        return rs;
+    }
+
+    public void startExam(String examName) {
         try {
-            Statement statement = conn.createStatement();
-            ResultSet rs = statement.executeQuery("SELECT examName, id FROM StudentExam " + "WHERE id = '" + this.userName + "' AND examName ='" + examName
-                    + "'");
-            if (rs.next()) {
+            if (getUserExamResult(userName, examName).next()) {
                 setExam(null);
                 return;
             }
-
-            rs = statement.executeQuery("SELECT examName, question, answer FROM Question " + "WHERE examName = '" + examName + "'");
-            Exam exam = new Exam(examName);
-            boolean hasQuestions = false;
-            while (rs.next()) {
-                hasQuestions = true;
-                String question = rs.getString("question");
-                System.out.println(question);
-                String answer = rs.getString("answer");
-                exam.addQuestion(new Question(question, answer));
-            }
-            if (hasQuestions) {
+            Exam exam = findExam(examName);
+            if (exam != null) {
                 setExam(exam);
                 this.nextQuestion();
             } else {
                 setExam(null);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println(ex);
+            System.err.println("Couldn't start the exam");
         }
     }
 
@@ -112,6 +118,7 @@ public class Model extends Observable {
                 rsDBMeta.close();
             }
         } catch (SQLException ex) {
+            System.err.println("Couldn't access the list of tables");
         }
         return flag;
     }
@@ -124,7 +131,7 @@ public class Model extends Observable {
             setupStudentExamTable(statement);
             statement.close();
         } catch (Throwable e) {
-            System.err.println(e);
+            System.err.println("Couldn't connect to DB");
         }
     }
 
@@ -181,11 +188,27 @@ public class Model extends Observable {
         return this.score;
     }
 
-    public void login(String username, UserType userType) {
+    public void login(String username, ActionType userType) {
         this.userName = username;
         this.userType = userType;
         setChanged();
         notifyObservers(userType);
+    }
+
+    public int getPreviousScore(String examCode) {
+        ResultSet rs;
+        int score = -1;
+        try {
+            rs = getUserExamResult(this.userName, examCode);
+            if (rs.next()) {
+                score = rs.getInt("score");
+            }
+        } catch (SQLException ex) {
+            System.err.println("Couldn't get the previous user scores");
+        }
+        this.setChanged();
+        notifyObservers(score);
+        return score;
     }
 
 }
