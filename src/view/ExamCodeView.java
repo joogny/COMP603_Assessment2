@@ -2,13 +2,15 @@ package view;
 
 import controller.ChooseExamController;
 import controller.ExamResultsController;
-import controller.QuitController;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.*;
 import model.ActionType;
 import model.Exam;
 import model.Model;
+import model.Quiz;
 
 
 /*
@@ -26,7 +28,7 @@ public class ExamCodeView extends JFrame implements Observer {
 
     private JLabel infoLabel = new JLabel("Exam doesn't exist or you have already done it");
 
-    private JButton quitButton = new JButton("Quit");
+    private JButton quitButton = new JButton("Go back to menu");
     private JButton passExamButton = new JButton("Pass exam");
 
     private JButton seeExamResultsButton = new JButton("See exam results");
@@ -41,9 +43,22 @@ public class ExamCodeView extends JFrame implements Observer {
         examCodePanel.add(passExamButton);
         examCodePanel.add(seeExamResultsButton);
         examCodePanel.add(infoLabel);
+        examCodePanel.add(quitButton);
+        quitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                restart();
+            }
+        });
+
         infoLabel.setVisible(false);
         this.add(examCodePanel);
 
+    }
+
+    public void restart() {
+        this.setVisible(false);
+        Quiz.main(null);
     }
 
     public JTextField getExamCodeInput() {
@@ -52,10 +67,6 @@ public class ExamCodeView extends JFrame implements Observer {
 
     public void addChooseExamController(ChooseExamController c) {
         passExamButton.addActionListener(c);
-    }
-
-    public void addQuitButtonController(QuitController c) {
-        quitButton.addActionListener(c);
     }
 
     public void addExamResultsController(ExamResultsController c) {

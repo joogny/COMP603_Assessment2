@@ -19,12 +19,10 @@ public class ChooseExamController implements ActionListener {
     ExamCodeView view;
 
     public void addModel(Model m) {
-        System.out.println("Controller: adding model");
         this.model = m;
     }
 
     public void addView(ExamCodeView v) {
-        System.out.println("Controller: adding view");
         this.view = v;
     }
 

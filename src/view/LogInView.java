@@ -45,6 +45,7 @@ public class LogInView extends JFrame implements Observer {
         panel.add(examLogIn);
         panel.add(resultsLogIn);
         panel.add(emptyInput);
+        panel.add(quitButton);
         emptyInput.setVisible(false);
         quitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

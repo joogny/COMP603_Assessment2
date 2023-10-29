@@ -7,7 +7,6 @@ import controller.LogInResultsController;
 import controller.NextQuestionController;
 import controller.QuitController;
 import controller.SaveScoreController;
-import model.Model;
 import view.ExamCodeView;
 import view.LogInView;
 import view.QuestionView;
@@ -56,7 +55,6 @@ public class Quiz {
         chooseExamController.addView(examCodeView);
 
         quitController.addModel(model);
-        quitController.addView(questionView);
 
         questionView.addNextButtonController(nextQuestionController);
         examCodeView.addChooseExamController(chooseExamController);
