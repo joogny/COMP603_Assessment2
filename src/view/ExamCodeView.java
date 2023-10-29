@@ -12,13 +12,6 @@ import model.Exam;
 import model.Model;
 import model.Quiz;
 
-
-/*
-TODO:
-Go back to menu
-More specific errors?
-DB autostart
- */
 public class ExamCodeView extends JFrame implements Observer {
 
     private JPanel examCodePanel = new JPanel();
@@ -38,6 +31,7 @@ public class ExamCodeView extends JFrame implements Observer {
     public ExamCodeView() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(600, 200);
+
         examCodePanel.add(examCodeLabel);
         examCodePanel.add(examCodeInput);
         examCodePanel.add(passExamButton);
@@ -84,10 +78,13 @@ public class ExamCodeView extends JFrame implements Observer {
             passExamButton.setVisible(true);
             seeExamResultsButton.setVisible(false);
             examCodeLabel.setText("Enter the name of the exam you want to start: ");
+            this.setTitle("Q and System - Pass exam");
+
         } else {
             passExamButton.setVisible(false);
             seeExamResultsButton.setVisible(true);
             examCodeLabel.setText("Enter the name of the exam you want to see the results of: ");
+            this.setTitle("Q and System - See results");
 
         }
         this.setVisible(true);

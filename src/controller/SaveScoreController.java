@@ -7,7 +7,6 @@ package controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import model.Model;
-import view.QuestionView;
 
 /**
  *
@@ -16,7 +15,6 @@ import view.QuestionView;
 public class SaveScoreController implements ActionListener {
 
     Model model;
-    QuestionView view;
 
     @Override
     public void actionPerformed(ActionEvent ae) {
@@ -24,13 +22,7 @@ public class SaveScoreController implements ActionListener {
     }
 
     public void addModel(Model m) {
-        System.out.println("Controller: adding model");
         this.model = m;
-    }
-
-    public void addView(QuestionView v) {
-        System.out.println("Controller: adding view");
-        this.view = v;
     }
 
 }

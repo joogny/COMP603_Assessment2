@@ -18,7 +18,6 @@ public class QuitController implements ActionListener {
     }
 
     public void addModel(Model m) {
-        System.out.println("Controller: adding model");
         this.model = m;
     }
 

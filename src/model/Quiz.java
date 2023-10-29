@@ -21,7 +21,6 @@ public class Quiz {
 
         SaveScoreController saveScoreController = new SaveScoreController();
         saveScoreController.addModel(model);
-        saveScoreController.addView(questionView);
         questionView.addSaveQuitButtonController(saveScoreController);
 
         ExamResultsController examResultsController = new ExamResultsController();

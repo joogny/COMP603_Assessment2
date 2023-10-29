@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package view;
 
 import controller.ChooseExamController;
@@ -28,10 +24,10 @@ public class LogInView extends JFrame implements Observer {
 
     private JPanel panel = new JPanel();
 
-    private JLabel userNameLabel = new JLabel("AUT ID: ");
+    private JLabel userNameLabel = new JLabel("AUT ID/Name: ");
     private JTextField userNameInput = new JTextField(10);
 
-    private JLabel emptyInput = new JLabel("Please input a name");
+    private JLabel emptyInput = new JLabel("Please input an ID or a name");
 
     private JButton quitButton = new JButton("Quit");
     private JButton examLogIn = new JButton("Pass exam");
@@ -40,6 +36,7 @@ public class LogInView extends JFrame implements Observer {
     public LogInView() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(600, 200);
+        this.setTitle("Q and System - Log In");
         panel.add(userNameLabel);
         panel.add(userNameInput);
         panel.add(examLogIn);

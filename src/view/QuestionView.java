@@ -6,8 +6,8 @@ import controller.SaveScoreController;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.*;
-import model.Model;
 import model.Exam;
+import model.Model;
 import model.Question;
 
 public class QuestionView extends JFrame implements Observer {
@@ -31,6 +31,7 @@ public class QuestionView extends JFrame implements Observer {
     public QuestionView() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(600, 200);
+        this.setTitle("Q and System - Exam");
 
     }
 
